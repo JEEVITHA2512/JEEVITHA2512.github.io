@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -32,65 +32,83 @@
 }
 
 :root {
-  --background: 210 20% 98%; /* #F9FAFB */
-  --foreground: 217 19% 27%; /* #374151 */
+  /* Tactile Minimalist - Light Theme (Default with Deep Pine Teal #003333) */
+  --background: 0 0% 100%; /* #FFFFFF */
+  --foreground: 180 100% 10%; /* #003333 (Deep Pine Teal) */
   
   --card: 0 0% 100%;
-  --card-foreground: 217 19% 27%;
+  --card-foreground: 180 100% 10%;
   
   --popover: 0 0% 100%;
-  --popover-foreground: 217 19% 27%;
+  --popover-foreground: 180 100% 10%;
   
-  --primary: 0 84% 60%; /* #EF4444 (Red highlight) */
+  --primary: 180 100% 10%; /* #003333 */
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 217 91% 60%; /* #3B82F6 (Blue accent) */
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 180 15% 96%; /* Subtle teal-tinted light gray */
+  --secondary-foreground: 180 100% 10%;
   
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --muted: 180 15% 96%;
+  --muted-foreground: 180 30% 25%; /* Darker, high-contrast teal-gray for clear readability */
   
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --accent: 180 15% 96%;
+  --accent-foreground: 180 100% 10%;
   
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive-foreground: 0 0% 98%;
 
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 0 84% 60%;
+  --border: 180 20% 90%; /* Soft teal-gray border tint */
+  --input: 180 20% 90%;
+  --ring: 180 100% 10%;
   
   --radius: 0.5rem;
+
+  --font-heading: 'HelveticaNowDisplay-Medium', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'HelveticaNowDisplayW01-Rg', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.admin-theme {
+  font-family: var(--font-body);
+}
+
+.admin-theme h1, .admin-theme h2, .admin-theme h3, .admin-theme h4, .admin-theme h5, .admin-theme h6, .admin-theme .font-heading {
+  font-family: var(--font-heading);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .dark {
-  --background: 215 28% 11%; /* #111827 */
-  --foreground: 210 40% 98%;
+  /* Tactile Minimalist - Dark Theme */
+  --background: 0 0% 4%; /* #0a0a0a */
+  --foreground: 0 0% 98%; /* #fafafa */
   
-  --card: 217 19% 15%; /* #1F2937 */
-  --card-foreground: 210 40% 98%;
+  --card: 0 0% 9%; /* #171717 */
+  --card-foreground: 0 0% 98%;
   
-  --popover: 217 19% 15%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 0 0% 9%;
+  --popover-foreground: 0 0% 98%;
   
-  --primary: 0 84% 60%; /* #EF4444 */
-  --primary-foreground: 0 0% 100%;
+  --primary: 180 91% 75%; /* #86F9F9 (Bright Aqua) */
+  --primary-foreground: 0 0% 9%;
   
-  --secondary: 217 91% 60%; /* #3B82F6 */
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 0 0% 15%; /* #262626 */
+  --secondary-foreground: 0 0% 98%;
   
-  --muted: 217 19% 20%;
-  --muted-foreground: 215 20.2% 65.1%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 64%; /* #a3a3a3 */
   
-  --accent: 217 19% 20%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 98%;
   
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive-foreground: 0 0% 98%;
   
-  --border: 217 19% 20%;
-  --input: 217 19% 20%;
-  --ring: 0 84% 60%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 180 91% 75%;
 }
 
 @layer base {
@@ -98,17 +116,127 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased font-sans transition-colors duration-300;
+    font-family: var(--font-body);
+    letter-spacing: 0.01em;
+    @apply bg-background text-foreground antialiased transition-colors duration-300 selection:bg-primary/20 selection:text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: 0.02em;
   }
 }
 
+/* Subtle dot pattern for tactile feel */
 .bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
 }
 
 .dark .bg-grid-pattern {
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Tactile shadow helpers */
+.tactile-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+.dark .tactile-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Tactile hover */
+.tactile-hover {
+  transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
+}
+.tactile-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+}
+.dark .tactile-hover:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Lenis smooth scrolling recommendations */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* --- Theme Transition View Transitions & CSS Fallback --- */
+
+/* Disable default cross-fade animations for view transitions to allow custom clip-path reveals */
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Ensure the new theme snapshot stacks above the old layout to render the circular expansion */
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* CSS transition fallback for browsers without View Transitions support */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 300ms ease,
+              border-color 300ms ease,
+              color 300ms ease,
+              fill 300ms ease,
+              stroke 300ms ease,
+              box-shadow 300ms ease !important;
+  transition-delay: 0s !important;
+}
+
+/* Glassmorphism Card/Capsule Base & Hover Styles */
+.brand-glass-card {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), inset 0 1px 1px rgba(255, 255, 255, 0.7) !important;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dark .brand-glass-card {
+  background-color: rgba(23, 23, 23, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+.brand-glass-card:hover {
+  background-color: var(--brand-glow) !important;
+  border-color: var(--brand-border) !important;
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.15), 0 0 15px var(--brand-shadow) !important;
 }

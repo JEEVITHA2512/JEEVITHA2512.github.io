@@ -1,49 +1,86 @@
-import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "./theme-provider";
+import React from "react";
 
 export function ThemeToggle({ className }: { className?: string }) {
-  const [isDark, setIsDark] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
 
-  useEffect(() => {
-    // Check initial preference
-    const isDarkMode = document.documentElement.classList.contains("dark") || 
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    
-    setIsDark(isDarkMode);
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
+  const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const nextTheme = isDark ? "light" : "dark";
 
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      setIsDark(true);
+    // Fallback if View Transitions API is not supported or reduced motion is preferred
+    if (
+      !(document as any).startViewTransition ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      document.documentElement.classList.add("theme-transition");
+      setTheme(nextTheme);
+      setTimeout(() => {
+        document.documentElement.classList.remove("theme-transition");
+      }, 300);
+      return;
     }
+
+    // Capture circular sweep origin coordinates from click event
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    // Calculate maximum radius to fully cover screen from origin
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = (document as any).startViewTransition(() => {
+      setTheme(nextTheme);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+
+      // Circular clip-path sweep reveals the new screen capture smoothly
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 450,
+          easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        }
+      );
+    });
   };
 
   return (
     <button
       onClick={toggleTheme}
       className={cn(
-        "p-2 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5",
+        "relative p-2 rounded-xl bg-card border border-border tactile-shadow tactile-hover w-10 h-10 flex items-center justify-center overflow-hidden cursor-pointer",
         className
       )}
       aria-label="Toggle Dark Mode"
     >
-      {isDark ? (
-        <Sun className="w-5 h-5 text-amber-500" />
-      ) : (
-        <Moon className="w-5 h-5 text-indigo-500" />
-      )}
+      <div className="relative w-5 h-5 flex items-center justify-center">
+        <Sun 
+          className={cn(
+            "w-5 h-5 text-primary absolute transition-all duration-500 ease-out transform",
+            isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
+          )} 
+        />
+        <Moon 
+          className={cn(
+            "w-5 h-5 text-foreground absolute transition-all duration-500 ease-out transform",
+            isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
+          )} 
+        />
+      </div>
     </button>
   );
 }

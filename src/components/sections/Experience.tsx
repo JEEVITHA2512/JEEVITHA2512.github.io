@@ -1,127 +1,138 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Briefcase, ChevronRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { portfolioData } from "@/data/portfolioData";
+
+type ExperienceData = {
+  id: number;
+  role: string;
+  company: string;
+  companyDescription: string | null;
+  date: string;
+  duration: string;
+  location: string;
+  highlights: string[];
+  skills: string[];
+};
 
 export function Experience({ id }: { id: string }) {
-  const experiences = [
-    {
-      role: "Generative AI & Data Science Engineer",
-      company: "BigTapp Analytics",
-      date: "June 2025 - Present",
-      duration: "10 months",
-      location: "Chennai, Tamil Nadu, India",
-      highlights: [
-        "Building production-grade GenAI and data science solutions",
-        "Designing scalable, cloud-native AI systems for enterprise clients",
-        "Working at the intersection of LLMs, data engineering, and MLOps"
-      ],
-      skills: ["GenAI", "Python", "LangChain", "AWS", "Data Science"]
-    },
-    {
-      role: "Software Engineer Intern",
-      company: "Blackstraw",
-      date: "September 2024 - June 2025",
-      duration: "10 months",
-      location: "Chennai, Tamil Nadu, India",
-      highlights: [
-        "Built autonomous multi-agent pipelines using CrewAI for code migration and refactoring tasks, with inter-agent memory sharing and OpenLit observability",
-        "Designed a full-stack analytics pipeline using Microsoft Fabric Analytics with Dataflows and Power BI dashboards, reducing manual analysis by 60%",
-        "Used KQL to analyze Azure Bot Framework telemetry logs, identifying drop-off points and latency issues to optimize bot flows"
-      ],
-      skills: ["CrewAI", "Agentic AI", "Microsoft Fabric", "Power BI", "KQL", "Azure"]
-    },
-    {
-      role: "Intern - Data Scientist",
-      company: "Lifease Solutions LLP",
-      date: "July 2023 - October 2023",
-      duration: "4 months",
-      location: "Noida, Uttar Pradesh, India",
-      highlights: [
-        "Processed raw audio using Librosa, pydub, and PyAudio with Mel-spectrogram, STFT, and MFCC feature extraction pipelines",
-        "Developed CNN, Bi-LSTM, and AutoEncoder architectures in TensorFlow and PyTorch for audio denoising, improving SNR metrics",
-        "Integrated Audo AI's APIs for production-grade noise suppression and explored TTS/STT pipelines with pyttsx3",
-        "Built PyQt GUI tools for visualizing spectrograms and toggling preprocessing methods"
-      ],
-      skills: ["Python", "TensorFlow", "PyTorch", "Librosa", "torchaudio", "PyQt", "Deep Learning"]
-    },
-    {
-      role: "Developer Intern",
-      company: "Tactii (formerly TalentAccurate)",
-      date: "January 2022 - October 2022",
-      duration: "10 months",
-      location: "Toronto, Ontario, Canada",
-      highlights: [
-        "Built custom NLU pipelines for domain-specific chatbots using Rasa and SpaCy with enhanced intent classification and fallback logic",
-        "Deployed ML models into user-facing applications with Flask APIs and Streamlit dashboards including an explainable sentiment analysis tool",
-        "Designed schema models for chatbot session logging and inference monitoring using ClickHouse for high-throughput analytical queries"
-      ],
-      skills: ["Rasa", "SpaCy", "Flask", "Streamlit", "ClickHouse", "NLP", "Python"]
-    }
-  ];
+  const { data: experiences = [], isLoading } = useQuery<ExperienceData[]>({
+    queryKey: ["experiences"],
+    queryFn: () => portfolioData.experiences,
+  });
+
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   return (
-    <section id={id} className="py-24">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="space-y-12 max-w-4xl mx-auto"
-      >
-        <div className="space-y-2 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">Work Experience</h2>
-          <div className="w-20 h-1.5 bg-primary mx-auto rounded-full"></div>
-        </div>
+    <section id={id} className="pt-10 pb-4">
+      <div className="w-full space-y-8">
+        
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="border-b border-border pb-4"
+        >
+          <h2 className="text-3xl md:text-4xl font-extrabold uppercase tracking-wider text-foreground">
+            Experience
+          </h2>
+        </motion.div>
 
-        <div className="relative border-l-2 border-primary/20 ml-4 md:ml-6 space-y-12">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative pl-8 md:pl-12"
-            >
-              <div className="absolute -left-[17px] top-1 w-8 h-8 bg-card border-4 border-primary rounded-full flex items-center justify-center shadow-md">
-                <Briefcase className="w-3 h-3 text-primary hidden sm:block" />
-              </div>
+        {/* Experience List Container */}
+        <div className="divide-y divide-border/60">
+          {isLoading ? (
+            <div className="py-12 text-center text-muted-foreground font-semibold">Loading experiences...</div>
+          ) : (
+            experiences.map((exp, index) => (
+              <motion.div
+                key={exp.id || index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onMouseEnter={() => setHoveredId(exp.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                onClick={() => setHoveredId(hoveredId === exp.id ? null : exp.id)}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 py-10 first:pt-4 last:pb-4 items-start cursor-pointer transition-all duration-300 hover:bg-foreground/[0.02] dark:hover:bg-white/[0.02] px-4 -mx-4 rounded-2xl group"
+              >
+                
+                {/* Column 1: Company & Dates (col-span-3) */}
+                <div className="lg:col-span-3 space-y-2">
+                  <h3 className="text-2xl font-extrabold text-foreground leading-none group-hover:text-primary transition-colors">
+                    {exp.company}
+                  </h3>
+                  <p className="text-sm font-semibold text-muted-foreground mt-1">
+                    {exp.companyDescription || exp.company}
+                  </p>
+                  <p className="text-sm font-bold text-primary tracking-wide pt-2 uppercase">
+                    {exp.date}
+                  </p>
+                </div>
 
-              <div className="bg-card p-6 md:p-8 rounded-2xl border border-border shadow-sm hover:shadow-lg transition-all duration-300 group">
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">{exp.role}</h3>
-                    <p className="text-lg font-medium text-muted-foreground">{exp.company}</p>
-                    <p className="text-sm text-muted-foreground mt-0.5">{exp.location}</p>
-                  </div>
-                  <div className="flex flex-col items-start md:items-end gap-1 shrink-0">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold whitespace-nowrap">
-                      {exp.date}
-                    </span>
-                    <span className="text-xs text-muted-foreground">{exp.duration}</span>
+                {/* Column 2: Metadata Details Table (col-span-3) */}
+                <div className="lg:col-span-3">
+                  <table className="w-full text-xs font-semibold text-muted-foreground">
+                    <tbody>
+                      <tr className="border-b border-border/40 py-2.5 flex justify-between">
+                        <td className="text-muted-foreground/60 uppercase tracking-wider">Position</td>
+                        <td className="text-foreground text-right">{exp.role}</td>
+                      </tr>
+                      <tr className="border-b border-border/40 py-2.5 flex justify-between">
+                        <td className="text-muted-foreground/60 uppercase tracking-wider">Location</td>
+                        <td className="text-foreground text-right">{exp.location}</td>
+                      </tr>
+                      <tr className="border-b border-border/40 py-2.5 flex justify-between">
+                        <td className="text-muted-foreground/60 uppercase tracking-wider">Duration</td>
+                        <td className="text-foreground text-right">{exp.duration}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Column 3: Detailed Description Paragraphs (col-span-6) */}
+                <div className="lg:col-span-6 space-y-3.5 text-sm md:text-base text-muted-foreground leading-relaxed font-medium">
+                  {/* Skills tags: visible by default */}
+                  {exp.skills && exp.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pb-1">
+                      {exp.skills.map(skill => (
+                        <span key={skill} className="px-2.5 py-1 bg-muted text-foreground text-[10px] md:text-xs font-bold rounded-lg border border-border uppercase tracking-wider">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Highlights collapsible animation container */}
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{
+                      height: hoveredId === exp.id ? "auto" : 0,
+                      opacity: hoveredId === exp.id ? 1 : 0
+                    }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="overflow-hidden space-y-3"
+                  >
+                    {exp.highlights.map((point, i) => (
+                      <p key={i} className="text-xs md:text-sm text-muted-foreground font-medium">
+                        {point}
+                      </p>
+                    ))}
+                  </motion.div>
+
+                  {/* Interactivity Indicator */}
+                  <div className="text-[10px] font-bold tracking-wider uppercase text-muted-foreground/45 group-hover:text-primary transition-colors duration-300 pt-1">
+                    {hoveredId === exp.id ? "Click/Leave to collapse" : "Hover / Tap to view details"}
                   </div>
                 </div>
 
-                <ul className="space-y-2 mb-6">
-                  {exp.highlights.map((point, i) => (
-                    <li key={i} className="flex gap-2 text-muted-foreground leading-relaxed text-sm">
-                      <ChevronRight className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex flex-wrap gap-2">
-                  {exp.skills.map(skill => (
-                    <span key={skill} className="px-3 py-1 bg-muted rounded-lg text-xs font-medium text-foreground">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))
+          )}
         </div>
-      </motion.div>
+
+      </div>
     </section>
   );
 }

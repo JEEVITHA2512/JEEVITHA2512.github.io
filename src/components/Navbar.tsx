@@ -1,28 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Hamburger, X } from "@phosphor-icons/react";
 
-const NAV_LINKS = [
-  { name: "About", href: "#about" },
-  { name: "Experience", href: "#experience" },
-  { name: "Education", href: "#education" },
-  { name: "Projects", href: "#projects" },
-  { name: "Publications", href: "#publications" },
-  { name: "Contact", href: "#contact" },
-];
+interface NavbarProps {
+  hasBlogs?: boolean;
+  hasPublications?: boolean;
+  hasPatents?: boolean;
+}
 
-export function Navbar() {
+export function Navbar({
+  hasBlogs = false,
+  hasPublications = false,
+  hasPatents = false,
+}: NavbarProps) {
   const [activeSection, setActiveSection] = useState("about");
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = useMemo(() => {
+    const links = [
+      { name: "About", href: "#about" },
+      { name: "Experience", href: "#experience" },
+      { name: "Education", href: "#education" },
+      { name: "Certifications", href: "#certifications" },
+      { name: "Projects", href: "#projects" },
+    ];
+    if (hasBlogs) links.push({ name: "Blog", href: "#blog" });
+    if (hasPublications) links.push({ name: "Publications", href: "#publications" });
+    if (hasPatents) links.push({ name: "Patents", href: "#patents" });
+    links.push({ name: "Contact", href: "#contact" });
+    return links;
+  }, [hasBlogs, hasPublications, hasPatents]);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
       // Simple scroll spy
-      const sections = NAV_LINKS.map(link => link.href.substring(1));
+      const sections = navLinks.map(link => link.href.substring(1));
       let current = "about";
       
       for (const section of sections) {
@@ -36,43 +52,44 @@ export function Navbar() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [navLinks]);
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
     const target = document.querySelector(href);
     if (target) {
-      window.scrollTo({
-        top: (target as HTMLElement).offsetTop - 80,
-        behavior: "smooth",
-      });
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.scrollTo(target as HTMLElement, {
+          offset: -80,
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+      } else {
+        window.scrollTo({
+          top: (target as HTMLElement).offsetTop - 80,
+          behavior: "smooth",
+        });
+      }
     }
   };
 
   return (
     <header
-      className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
-        isScrolled 
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm py-3" 
-          : "bg-transparent py-5"
-      )}
+      className="fixed z-50 transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 top-4 w-[calc(100%-2rem)] lg:w-[calc(100%-4rem)] max-w-7xl bg-background/80 backdrop-blur-md border border-border shadow-md py-2.5 px-6 rounded-full"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full">
         <div className="flex items-center justify-between">
           
           {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-foreground text-background flex items-center justify-center font-bold text-lg rounded-xl shadow-md cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
-              JM
-            </div>
-            <span className="font-bold text-lg hidden sm:block">Jeevitha Murugan</span>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <span className="font-bold text-lg block">Jeevitha Murugan</span>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-            {NAV_LINKS.map((link) => (
+          <nav className="hidden lg:flex items-center gap-1 lg:gap-2">
+            {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
@@ -97,10 +114,10 @@ export function Navbar() {
             
             {/* Mobile menu button */}
             <button 
-              className="md:hidden p-2 text-foreground"
+              className="lg:hidden p-2 text-foreground"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X /> : <Menu />}
+              {mobileMenuOpen ? <X /> : <Hamburger />}
             </button>
           </div>
         </div>
@@ -108,8 +125,8 @@ export function Navbar() {
 
       {/* Mobile Nav */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border p-4 shadow-lg flex flex-col gap-2">
-          {NAV_LINKS.map((link) => (
+        <div className="lg:hidden absolute left-0 right-0 bg-background border border-border p-4 rounded-3xl shadow-lg flex flex-col gap-2 top-[calc(100%+0.5rem)] transition-all duration-300">
+          {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}

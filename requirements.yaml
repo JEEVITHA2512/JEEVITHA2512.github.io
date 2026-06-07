@@ -1,9 +1,0 @@
-packages:
-  "framer-motion": "Used for premium scroll-reveal animations and page transitions."
-  "clsx": "Utility for constructing className strings conditionally."
-  "tailwind-merge": "Utility to safely merge Tailwind classes."
-images: []
-notes:
-  - "The portfolio is a static frontend website, data is hardcoded as per the requirements."
-  - "Smooth scrolling is implemented for intra-page navigation."
-  - "Theme toggle utilizes a basic dark mode class on the HTML element."
