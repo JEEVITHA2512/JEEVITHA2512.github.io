@@ -95,91 +95,93 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:landscape:grid-cols-12 xl:grid-cols-12 gap-8 items-start relative">
           
           {/* Left Column: Static Profile Card */}
-          <aside className="lg:landscape:col-span-4 xl:col-span-3 lg:landscape:sticky lg:landscape:top-[90px] xl:sticky xl:top-[90px] lg:landscape:max-h-[calc(100vh-110px)] xl:max-h-[calc(100vh-110px)] lg:landscape:overflow-y-auto xl:overflow-y-auto space-y-3 xl:space-y-4 pb-4 w-full max-w-sm mx-auto lg:landscape:mx-0 xl:mx-0 z-20">
-            
-            {/* Avatar Photo */}
-            <BorderGlow className="shadow-md" borderRadius={32} backgroundColor="hsl(var(--card))" colors={['var(--primary)']}>
-              <div className="p-3 rounded-[2rem] bg-card overflow-hidden">
-                <div className="aspect-square w-full rounded-2xl overflow-hidden bg-muted relative">
-                  {profile.avatarUrl ? (
-                    <img
-                      src={profile.avatarUrl.startsWith("http") ? profile.avatarUrl : `${import.meta.env.BASE_URL.replace(/\/$/, "")}${profile.avatarUrl}`}
-                      alt={profile.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      No Photo
+          <aside className="lg:landscape:col-span-4 xl:col-span-3 relative h-full">
+            <div className="lg:landscape:fixed xl:fixed lg:landscape:top-[90px] xl:top-[90px] lg:landscape:w-[inherit] xl:w-[inherit] lg:landscape:max-h-[calc(100vh-110px)] xl:max-h-[calc(100vh-110px)] lg:landscape:overflow-y-auto xl:overflow-y-auto space-y-3 xl:space-y-4 pb-4 w-full max-w-sm mx-auto lg:landscape:mx-0 xl:mx-0 z-20">
+              
+              {/* Avatar Photo */}
+              <BorderGlow className="shadow-md" borderRadius={32} backgroundColor="hsl(var(--card))" colors={['var(--primary)']}>
+                <div className="p-3 rounded-[2rem] bg-card overflow-hidden">
+                  <div className="aspect-square w-full rounded-2xl overflow-hidden bg-muted relative">
+                    {profile.avatarUrl ? (
+                      <img
+                        src={profile.avatarUrl.startsWith("http") ? profile.avatarUrl : `${import.meta.env.BASE_URL.replace(/\/$/, "")}${profile.avatarUrl}`}
+                        alt={profile.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        No Photo
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </BorderGlow>
+
+              {/* Profile Info Details */}
+              <BorderGlow className="shadow-md" borderRadius={32} backgroundColor="hsl(var(--card))" colors={['var(--primary)']}>
+                <div className="p-4 rounded-[2rem] bg-card space-y-3 xl:space-y-3.5">
+                  <div>
+                    <h1 className="text-xl xl:text-[22px] font-extrabold text-foreground">{profile.name}</h1>
+                    <p className="text-xs xl:text-sm font-semibold text-muted-foreground mt-1">{profile.title}</p>
+                  </div>
+
+                  {/* Details list */}
+                  <div className="space-y-1.5 xl:space-y-2 border-t border-b border-border py-2 xl:py-2.5 text-xs font-semibold">
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-muted-foreground shrink-0">Location</span>
+                      <span className="text-foreground truncate max-w-[190px]">{profile.location || "—"}</span>
                     </div>
-                  )}
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-muted-foreground shrink-0">Email</span>
+                      <a href={`mailto:${profile.email}`} className="text-foreground hover:text-primary transition-colors truncate max-w-[190px]" title={profile.email}>
+                        {profile.email}
+                      </a>
+                    </div>
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-muted-foreground shrink-0">Role</span>
+                      <span className="text-foreground truncate max-w-[190px]" title={profile.role || ""}>{profile.role || "—"}</span>
+                    </div>
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-muted-foreground shrink-0">Community</span>
+                      <span className="text-foreground truncate max-w-[190px]" title={profile.community || ""}>{profile.community || "—"}</span>
+                    </div>
+                  </div>
+
+                  {/* Social & CTA button */}
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <a 
+                        href={profile.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="flex-1 p-2 bg-muted hover:bg-foreground/5 border border-border rounded-xl text-center flex justify-center text-foreground hover:text-primary transition-all duration-200" 
+                        title="GitHub"
+                      >
+                        <FaGithub className="w-5 h-5" />
+                      </a>
+                      <a 
+                        href={profile.linkedin} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="flex-1 p-2 bg-muted hover:bg-foreground/5 border border-border rounded-xl text-center flex justify-center text-foreground hover:text-primary transition-all duration-200" 
+                        title="LinkedIn"
+                      >
+                        <FaLinkedin className="w-5 h-5" />
+                      </a>
+                      <a 
+                        href={`mailto:${profile.email}`} 
+                        className="flex-1 p-2 bg-muted hover:bg-foreground/5 border border-border rounded-xl text-center flex justify-center text-foreground hover:text-primary transition-all duration-200" 
+                        title="Email"
+                      >
+                        <EnvelopeSimple className="w-5 h-5" />
+                      </a>
+                    </div>
+                  </div>
+
                 </div>
-              </div>
-            </BorderGlow>
+              </BorderGlow>
 
-            {/* Profile Info Details */}
-            <BorderGlow className="shadow-md" borderRadius={32} backgroundColor="hsl(var(--card))" colors={['var(--primary)']}>
-              <div className="p-4 rounded-[2rem] bg-card space-y-3 xl:space-y-3.5">
-                <div>
-                  <h1 className="text-xl xl:text-[22px] font-extrabold text-foreground">{profile.name}</h1>
-                  <p className="text-xs xl:text-sm font-semibold text-muted-foreground mt-1">{profile.title}</p>
-                </div>
-
-                {/* Details list */}
-                <div className="space-y-1.5 xl:space-y-2 border-t border-b border-border py-2 xl:py-2.5 text-xs font-semibold">
-                  <div className="flex justify-between items-center gap-2">
-                    <span className="text-muted-foreground shrink-0">Location</span>
-                    <span className="text-foreground truncate max-w-[190px]">{profile.location || "—"}</span>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <span className="text-muted-foreground shrink-0">Email</span>
-                    <a href={`mailto:${profile.email}`} className="text-foreground hover:text-primary transition-colors truncate max-w-[190px]" title={profile.email}>
-                      {profile.email}
-                    </a>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <span className="text-muted-foreground shrink-0">Role</span>
-                    <span className="text-foreground truncate max-w-[190px]" title={profile.role || ""}>{profile.role || "—"}</span>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <span className="text-muted-foreground shrink-0">Community</span>
-                    <span className="text-foreground truncate max-w-[190px]" title={profile.community || ""}>{profile.community || "—"}</span>
-                  </div>
-                </div>
-
-                {/* Social & CTA button */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <a 
-                      href={profile.github} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="flex-1 p-2 bg-muted hover:bg-foreground/5 border border-border rounded-xl text-center flex justify-center text-foreground hover:text-primary transition-all duration-200" 
-                      title="GitHub"
-                    >
-                      <FaGithub className="w-5 h-5" />
-                    </a>
-                    <a 
-                      href={profile.linkedin} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="flex-1 p-2 bg-muted hover:bg-foreground/5 border border-border rounded-xl text-center flex justify-center text-foreground hover:text-primary transition-all duration-200" 
-                      title="LinkedIn"
-                    >
-                      <FaLinkedin className="w-5 h-5" />
-                    </a>
-                    <a 
-                      href={`mailto:${profile.email}`} 
-                      className="flex-1 p-2 bg-muted hover:bg-foreground/5 border border-border rounded-xl text-center flex justify-center text-foreground hover:text-primary transition-all duration-200" 
-                      title="Email"
-                    >
-                      <EnvelopeSimple className="w-5 h-5" />
-                    </a>
-                  </div>
-                </div>
-
-              </div>
-            </BorderGlow>
-
+            </div>
           </aside>
 
           {/* Right Column: Scrollable Sections */}
