@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FolderSimple, ArrowSquareOut, ArrowLeft, MagnifyingGlass, Funnel } from "@phosphor-icons/react";
 import { FaGithub } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
+import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import { portfolioData } from "@/data/portfolioData";
 import BorderGlow from "@/components/ui/BorderGlow";
 import { Button } from "@/components/ui/button";
@@ -151,9 +152,9 @@ export default function ProjectsPage() {
 
           {/* Projects Showcases */}
           {isLoading ? (
-            <div className="py-24 text-center">
-              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-muted-foreground font-semibold uppercase tracking-wide text-xs">Fetching archive...</p>
+            <div className="py-24 flex flex-col items-center justify-center gap-6">
+              <LumaSpin />
+              <p className="text-muted-foreground font-semibold uppercase tracking-wide text-xs animate-pulse">Fetching archive...</p>
             </div>
           ) : projects.length === 0 ? (
             <motion.div

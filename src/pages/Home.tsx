@@ -17,6 +17,7 @@ import BorderGlow from "@/components/ui/BorderGlow";
 import { Button } from "@/components/ui/button";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { EnvelopeSimple, ArrowRight } from "@phosphor-icons/react";
+import { Component as LumaSpin } from "@/components/ui/luma-spin";
 
 export default function Home() {
   const { data: profile, isLoading: isProfileLoading } = useQuery({
@@ -71,9 +72,9 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Loading portfolio...</p>
+        <div className="flex flex-col items-center gap-6">
+          <LumaSpin />
+          <p className="text-sm font-semibold tracking-wide text-muted-foreground uppercase animate-pulse">Loading portfolio...</p>
         </div>
       </div>
     );
