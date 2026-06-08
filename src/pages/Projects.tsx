@@ -152,9 +152,8 @@ export default function ProjectsPage() {
 
           {/* Projects Showcases */}
           {isLoading ? (
-            <div className="py-24 flex flex-col items-center justify-center gap-6">
+            <div className="py-24 flex items-center justify-center">
               <LumaSpin />
-              <p className="text-muted-foreground font-semibold uppercase tracking-wide text-xs animate-pulse">Fetching archive...</p>
             </div>
           ) : projects.length === 0 ? (
             <motion.div

@@ -72,10 +72,7 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
-        <div className="flex flex-col items-center gap-6">
-          <LumaSpin />
-          <p className="text-sm font-semibold tracking-wide text-muted-foreground uppercase animate-pulse">Loading portfolio...</p>
-        </div>
+        <LumaSpin />
       </div>
     );
   }
