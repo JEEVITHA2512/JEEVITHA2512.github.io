@@ -95,7 +95,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:landscape:grid-cols-12 xl:grid-cols-12 gap-8 items-start relative">
           
           {/* Left Column: Static Profile Card */}
-          <aside className="lg:landscape:col-span-4 xl:col-span-3 lg:landscape:sticky lg:landscape:top-[90px] xl:sticky xl:top-[90px] space-y-3 xl:space-y-4 pb-4 w-full max-w-sm mx-auto lg:landscape:mx-0 xl:mx-0 z-20">
+          <aside className="lg:landscape:col-span-4 xl:col-span-3 lg:landscape:sticky lg:landscape:top-[90px] xl:sticky xl:top-[90px] lg:landscape:max-h-[calc(100vh-110px)] xl:max-h-[calc(100vh-110px)] lg:landscape:overflow-y-auto xl:overflow-y-auto space-y-3 xl:space-y-4 pb-4 w-full max-w-sm mx-auto lg:landscape:mx-0 xl:mx-0 z-20">
             
             {/* Avatar Photo */}
             <BorderGlow className="shadow-md" borderRadius={32} backgroundColor="hsl(var(--card))" colors={['var(--primary)']}>
