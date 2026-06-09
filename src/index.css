@@ -197,6 +197,7 @@ html.lenis, html.lenis body {
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+  will-change: clip-path, opacity;
 }
 
 /* Ensure the new theme snapshot stacks above the old layout to render the circular expansion */
@@ -207,18 +208,28 @@ html.lenis, html.lenis body {
   z-index: 9999;
 }
 
-/* CSS transition fallback for browsers without View Transitions support */
-.theme-transition,
-.theme-transition *,
-.theme-transition *::before,
-.theme-transition *::after {
+/* Lightweight fallback transitions when View Transitions API is unavailable */
+html.theme-transition,
+html.theme-transition body,
+html.theme-transition main,
+html.theme-transition header,
+html.theme-transition nav,
+html.theme-transition section,
+html.theme-transition footer,
+html.theme-transition button,
+html.theme-transition a,
+html.theme-transition input,
+html.theme-transition textarea,
+html.theme-transition [role="button"],
+html.theme-transition [class*="bg-"],
+html.theme-transition [class*="text-"],
+html.theme-transition [class*="border-"] {
   transition: background-color 300ms ease,
               border-color 300ms ease,
               color 300ms ease,
               fill 300ms ease,
-              stroke 300ms ease,
-              box-shadow 300ms ease !important;
-  transition-delay: 0s !important;
+              stroke 300ms ease;
+  transition-delay: 0s;
 }
 
 /* Glassmorphism Card/Capsule Base & Hover Styles */
