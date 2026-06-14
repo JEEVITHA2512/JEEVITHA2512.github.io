@@ -3,23 +3,54 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "./theme-provider";
 import React from "react";
 
+type ThemeViewTransition = {
+  ready: Promise<void>;
+  finished: Promise<void>;
+};
+
+type DocumentWithViewTransition = Document & {
+  startViewTransition?: (update: () => void) => ThemeViewTransition;
+};
+
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
+  const isTransitioningRef = React.useRef(false);
+  const fallbackTimerRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (fallbackTimerRef.current !== null) {
+        window.clearTimeout(fallbackTimerRef.current);
+      }
+    };
+  }, []);
 
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isTransitioningRef.current) return;
+
+    isTransitioningRef.current = true;
     const nextTheme = isDark ? "light" : "dark";
+    const doc = document as DocumentWithViewTransition;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Fallback if View Transitions API is not supported or reduced motion is preferred
     if (
-      !(document as any).startViewTransition ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      !doc.startViewTransition ||
+      prefersReducedMotion
     ) {
       document.documentElement.classList.add("theme-transition");
       setTheme(nextTheme);
-      setTimeout(() => {
+
+      if (fallbackTimerRef.current !== null) {
+        window.clearTimeout(fallbackTimerRef.current);
+      }
+
+      fallbackTimerRef.current = window.setTimeout(() => {
         document.documentElement.classList.remove("theme-transition");
-      }, 300);
+        isTransitioningRef.current = false;
+      }, 240);
+
       return;
     }
 
@@ -34,7 +65,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       Math.max(y, window.innerHeight - y)
     );
 
-    const transition = (document as any).startViewTransition(() => {
+    const transition = doc.startViewTransition(() => {
       setTheme(nextTheme);
     });
 
@@ -50,11 +81,17 @@ export function ThemeToggle({ className }: { className?: string }) {
           clipPath: clipPath,
         },
         {
-          duration: 450,
-          easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+          duration: 380,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
           pseudoElement: "::view-transition-new(root)",
         }
       );
+    }).catch(() => {
+      setTheme(nextTheme);
+    }).finally(() => {
+      transition.finished.finally(() => {
+        isTransitioningRef.current = false;
+      });
     });
   };
 
