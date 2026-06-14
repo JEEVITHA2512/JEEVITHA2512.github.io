@@ -6,7 +6,7 @@ import path from "path";
 const port = Number(process.env.PORT ?? 5173);
 
 export default defineConfig({
-  base: process.env.VERCEL === "1" ? "/" : (process.env.NODE_ENV === "production" ? "/Portfolio-Jeevitha/" : "/"),
+  base: "/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
