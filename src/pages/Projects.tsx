@@ -8,6 +8,7 @@ import { Component as LumaSpin } from "@/components/ui/luma-spin";
 import { portfolioData } from "@/data/portfolioData";
 import BorderGlow from "@/components/ui/BorderGlow";
 import { Button } from "@/components/ui/button";
+import { ProjectModal } from "@/components/ProjectModal";
 
 type ProjectData = {
   id: number;
@@ -22,6 +23,7 @@ type ProjectData = {
 export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
   // Fetch all projects
   const { data: projects = [], isLoading } = useQuery<ProjectData[]>({
@@ -213,7 +215,10 @@ export default function ProjectsPage() {
                       backgroundColor="var(--card)"
                       colors={['var(--primary)', 'rgba(134,249,249,0.3)']}
                     >
-                      <div className="flex flex-col rounded-[24px] overflow-hidden bg-card hover:bg-card/50 transition-colors h-full relative z-10">
+                      <div 
+                        onClick={() => setSelectedProject(project)}
+                        className="flex flex-col rounded-[24px] overflow-hidden bg-card hover:bg-card/50 transition-colors h-full relative z-10 cursor-pointer"
+                      >
                         
                         {/* Cover Image */}
                         <div className="h-44 w-full overflow-hidden relative bg-black/5 dark:bg-white/5 border-b border-border/50">
@@ -248,6 +253,7 @@ export default function ProjectsPage() {
                                   href={project.github}
                                   target="_blank"
                                   rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
                                   className="text-muted-foreground hover:text-foreground transition-colors p-1 bg-foreground/5 dark:bg-white/5 rounded-lg border border-border/30 hover:border-border"
                                   aria-label="GitHub Repository"
                                 >
@@ -259,6 +265,7 @@ export default function ProjectsPage() {
                                   href={project.link}
                                   target="_blank"
                                   rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
                                   className="text-muted-foreground hover:text-foreground transition-colors p-1 bg-foreground/5 dark:bg-white/5 rounded-lg border border-border/30 hover:border-border"
                                   aria-label="External Link"
                                 >
@@ -278,7 +285,7 @@ export default function ProjectsPage() {
                             {project.tags.map((tech) => (
                               <span
                                 key={tech}
-                                className="px-2 py-0.5 bg-foreground/5 dark:bg-white/5 text-foreground/80 dark:text-white/80 rounded-md text-[10px] font-bold tracking-wide border border-border/30 group-hover:border-primary/20 transition-colors"
+                                className="px-2 py-0.5 bg-foreground/5 dark:bg-white/5 text-foreground/80 dark:text-white/80 rounded-md text-[10px] font-bold tracking-wide border border-border/30 group-hover:border-primary/20 transition-colors whitespace-nowrap"
                               >
                                 {tech}
                               </span>
@@ -296,6 +303,7 @@ export default function ProjectsPage() {
 
         </div>
       </main>
+      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </div>
   );
 }

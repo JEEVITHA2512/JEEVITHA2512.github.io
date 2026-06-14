@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 export function Contact({ id }: { id: string }) {
   const socials = [
-    { name: "GitHub", href: "https://github.com/jeevithamurugan", icon: <FaGithub className="w-4 h-4" /> },
+    { name: "GitHub", href: "https://github.com/JEEVITHA2512", icon: <FaGithub className="w-4 h-4" /> },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/jeevitha-murugan-357979223", icon: <FaLinkedin className="w-4 h-4" /> },
     { name: "Email", href: "mailto:jeevithamurugan.2512@gmail.com", icon: <EnvelopeSimple className="w-4 h-4" /> },
   ];

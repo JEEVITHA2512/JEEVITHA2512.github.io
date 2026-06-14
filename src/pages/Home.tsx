@@ -25,9 +25,25 @@ export default function Home() {
     queryFn: () => portfolioData.profile
   });
 
-  const { data: blogs = [], isLoading: isBlogsLoading } = useQuery({
+  const { data: blogs = [], isLoading: isBlogsLoading } = useQuery<any[]>({
     queryKey: ["blogs"],
-    queryFn: () => portfolioData.blogs
+    queryFn: async () => {
+      const usernames = ["jeevitha.m", "jeevithamurugan", "jeevithamurugan.2512"];
+      for (const username of usernames) {
+        try {
+          const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${username}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === "ok" && data.items && data.items.length > 0) {
+              return data.items;
+            }
+          }
+        } catch (err) {
+          console.error(`Failed to fetch Medium RSS feed in Home for @${username}:`, err);
+        }
+      }
+      return portfolioData.blogs;
+    }
   });
 
   const { data: publications = [], isLoading: isPubsLoading } = useQuery({

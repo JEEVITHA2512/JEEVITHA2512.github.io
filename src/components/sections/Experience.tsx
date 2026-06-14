@@ -73,22 +73,20 @@ export function Experience({ id }: { id: string }) {
 
                 {/* Column 2: Metadata Details Table (col-span-3) */}
                 <div className="lg:col-span-3">
-                  <table className="w-full text-xs font-semibold text-muted-foreground">
-                    <tbody>
-                      <tr className="border-b border-border/40 py-2.5 flex justify-between">
-                        <td className="text-muted-foreground/60 uppercase tracking-wider">Position</td>
-                        <td className="text-foreground text-right">{exp.role}</td>
-                      </tr>
-                      <tr className="border-b border-border/40 py-2.5 flex justify-between">
-                        <td className="text-muted-foreground/60 uppercase tracking-wider">Location</td>
-                        <td className="text-foreground text-right">{exp.location}</td>
-                      </tr>
-                      <tr className="border-b border-border/40 py-2.5 flex justify-between">
-                        <td className="text-muted-foreground/60 uppercase tracking-wider">Duration</td>
-                        <td className="text-foreground text-right">{exp.duration}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="w-full text-xs font-semibold text-muted-foreground space-y-2.5">
+                    <div className="border-b border-border/40 pb-2.5 flex justify-between gap-4 items-start">
+                      <span className="text-muted-foreground/60 uppercase tracking-wider shrink-0">Position</span>
+                      <span className="text-foreground text-right">{exp.role}</span>
+                    </div>
+                    <div className="border-b border-border/40 pb-2.5 flex justify-between gap-4 items-start">
+                      <span className="text-muted-foreground/60 uppercase tracking-wider shrink-0">Location</span>
+                      <span className="text-foreground text-right">{exp.location}</span>
+                    </div>
+                    <div className="border-b border-border/40 pb-2.5 flex justify-between gap-4 items-start">
+                      <span className="text-muted-foreground/60 uppercase tracking-wider shrink-0">Duration</span>
+                      <span className="text-foreground text-right">{exp.duration}</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Column 3: Detailed Description Paragraphs (col-span-6) */}

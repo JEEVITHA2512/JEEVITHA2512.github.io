@@ -1,9 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowSquareOut, RssSimple } from "@phosphor-icons/react";
 import BorderGlow from "@/components/ui/BorderGlow";
 import { useQuery } from "@tanstack/react-query";
 import { portfolioData } from "@/data/portfolioData";
+import { BlogModal } from "@/components/BlogModal";
 
 type BlogItem = {
   id: number;
@@ -18,7 +19,24 @@ function stripHtml(input: string) {
 }
 
 function formatDate(value: string) {
-  const date = new Date(value);
+  if (!value) return "Recent Post";
+  // Replace space with "T" to make it friendly to standard ISO parsers in all browsers
+  const normalizedValue = value.trim().replace(" ", "T");
+  const date = new Date(normalizedValue);
+  
+  if (isNaN(date.getTime())) {
+    const fallbackDate = new Date(value);
+    if (isNaN(fallbackDate.getTime())) {
+      // Return a safe portion of the original string (e.g. YYYY-MM-DD) or the string itself
+      return value.split(" ")[0] || value;
+    }
+    return new Intl.DateTimeFormat("en", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }).format(fallbackDate);
+  }
+  
   return new Intl.DateTimeFormat("en", {
     month: "short",
     day: "numeric",
@@ -27,9 +45,33 @@ function formatDate(value: string) {
 }
 
 export function Blog({ id }: { id: string }) {
+  const [selectedPost, setSelectedPost] = useState<BlogItem | null>(null);
   const { data: blogs = [], isLoading, error } = useQuery<BlogItem[]>({
     queryKey: ["blogs"],
-    queryFn: () => portfolioData.blogs,
+    queryFn: async () => {
+      // List of usernames to try fetching
+      const usernames = ["jeevitha.m", "jeevithamurugan", "jeevithamurugan.2512"];
+      for (const username of usernames) {
+        try {
+          const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${username}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === "ok" && data.items && data.items.length > 0) {
+              return data.items.map((item: any, idx: number) => ({
+                id: idx + 1,
+                title: item.title,
+                date: item.pubDate,
+                link: item.link,
+                description: item.description || item.content || "Read the full article on Medium.",
+              }));
+            }
+          }
+        } catch (err) {
+          console.error(`Failed to fetch Medium RSS feed for @${username}:`, err);
+        }
+      }
+      return portfolioData.blogs;
+    },
   });
 
   const posts = useMemo(
@@ -94,11 +136,9 @@ export function Blog({ id }: { id: string }) {
           ) : (
             posts.slice(0, 6).map((post) => (
               <BorderGlow key={post.link} className="tactile-shadow tactile-hover h-full" borderRadius={32} backgroundColor="hsl(var(--card))" colors={['var(--primary)']}>
-                <a
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group border border-border rounded-[2rem] p-6 md:p-8 h-full z-10 flex flex-col"
+                <div
+                  onClick={() => setSelectedPost(post)}
+                  className="group border border-border rounded-[2rem] p-6 md:p-8 h-full z-10 flex flex-col cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="p-3 rounded-xl bg-foreground/5 text-foreground">
@@ -119,12 +159,13 @@ export function Blog({ id }: { id: string }) {
                   <p className="text-muted-foreground text-sm leading-relaxed mb-5 flex-grow">
                     {post.summary || "Read the full article."}
                   </p>
-                </a>
+                </div>
               </BorderGlow>
             ))
           )}
         </motion.div>
       </div>
+      <BlogModal post={selectedPost} onClose={() => setSelectedPost(null)} />
     </section>
   );
 }
