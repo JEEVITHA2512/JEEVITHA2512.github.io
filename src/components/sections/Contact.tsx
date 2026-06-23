@@ -7,6 +7,16 @@ export function Contact({ id }: { id: string }) {
     { name: "GitHub", href: "https://github.com/JEEVITHA2512", icon: <FaGithub className="w-4 h-4" /> },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/jeevitha-murugan-357979223", icon: <FaLinkedin className="w-4 h-4" /> },
     { name: "Email", href: "mailto:jeevithamurugan.2512@gmail.com", icon: <EnvelopeSimple className="w-4 h-4" /> },
+    { 
+      name: "Topmate", 
+      href: "https://topmate.io/jeevitha_m_25/", 
+      icon: (
+        <svg viewBox="0 0 47 46" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+          <circle r="22.5" transform="matrix(1 0 0 -1 23.6152 23)" fill="#E44332" stroke="#E44332"/>
+          <path d="M33.0038 29.6411C31.5707 31.6672 29.5206 33.1752 27.1598 33.9401C24.7989 34.705 22.254 34.6857 19.905 33.8851C17.5561 33.0844 15.5291 31.5454 14.1269 29.4978C12.7247 27.4503 12.0225 25.0041 12.1251 22.5246C12.2277 20.045 13.1296 17.6652 14.6962 15.7405C16.2627 13.8158 18.4099 12.4495 20.817 11.8456C23.224 11.2418 25.7619 11.4328 28.0515 12.3901C30.341 13.3474 32.2595 15.0197 33.5204 17.1572L23.6152 23L33.0038 29.6411Z" fill="#FEF7F7"/>
+        </svg>
+      )
+    },
   ];
 
   return (

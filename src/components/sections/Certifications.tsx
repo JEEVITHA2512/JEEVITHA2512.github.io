@@ -116,6 +116,7 @@ const getBrandColor = (issuer: string, name: string) => {
   if (lowerIssuer.includes("dataiku")) return "#FFC000";
   if (lowerIssuer.includes("cambridge")) return "#A3D235";
   if (lowerIssuer.includes("iso")) return "#00508F";
+  if (lowerIssuer.includes("red team leaders")) return "#EF4444";
   
   return "#3B82F6"; // default blue
 };

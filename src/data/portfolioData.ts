@@ -11,6 +11,7 @@ export interface Profile {
   github: string;
   linkedin: string;
   email: string;
+  topmate?: string;
   googleScholarUrl: string | null;
   location: string | null;
   role: string | null;
@@ -125,6 +126,7 @@ export const portfolioData: PortfolioData = {
     github: "https://github.com/JEEVITHA2512",
     linkedin: "https://www.linkedin.com/in/jeevitha-murugan-357979223",
     email: "jeevithamurugan.2512@gmail.com",
+    topmate: "https://topmate.io/jeevitha_m_25/",
     googleScholarUrl: "https://scholar.google.com/citations?user=sNlZI-4AAAAJ&hl=en",
     location: "Chennai, India",
     role: "Data Scientist",
@@ -209,7 +211,8 @@ export const portfolioData: PortfolioData = {
   certifications: [
     { id: 1, name: "AWS Certified Generative AI Developer Professional", issuer: "Amazon Web Services (AWS)", date: "04/2026 - Present", credentialId: null, credentialUrl: null, logoUrl: null },
     { id: 2, name: "Dataiku Generative AI Practitioner Certified", issuer: "Dataiku", date: "11/2025 - Present", credentialId: null, credentialUrl: null, logoUrl: null },
-    { id: 3, name: "Databricks Certified Machine Learning Professional", issuer: "Databricks", date: "12/2025 - Present", credentialId: null, credentialUrl: null, logoUrl: null }
+    { id: 3, name: "Databricks Certified Machine Learning Professional", issuer: "Databricks", date: "12/2025 - Present", credentialId: null, credentialUrl: null, logoUrl: null },
+    { id: 4, name: "Certified LLM Security Professional (CLLMSP)", issuer: "Red Team Leaders", date: "06/2026 - Present", credentialId: "32b89e4e41403db9", credentialUrl: "https://courses.redteamleaders.com/exam-completion/32b89e4e41403db9", logoUrl: null }
   ],
   awards: [
     { id: 1, name: "AWS APJC Community Award - Customer Obsession Category (AWS Re:Invent 2025, Las Vegas, USA)", issuer: "Amazon Web Services", year: "2025" },
